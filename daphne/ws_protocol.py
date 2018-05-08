@@ -118,12 +118,6 @@ class WebSocketProtocol(WebSocketServerProtocol):
             "client": "%s:%s" % tuple(self.client_addr) if self.client_addr else None,
         })
 
-        from pympler import muppy
-        from pympler import summary
-        all_objects = muppy.get_objects()
-        sum1 = summary.summarize(all_objects)
-        summary.print_(sum1)
-
     def onMessage(self, payload, isBinary):
         # If we're muted, do nothing.
         if self.muted:
