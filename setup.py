@@ -25,6 +25,7 @@ setup(
     install_requires=[
         "twisted>=17.5",
         "autobahn>=0.18",
+        "Pympler==0.5"
     ],
     setup_requires=[
         "pytest-runner",
