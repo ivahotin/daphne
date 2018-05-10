@@ -213,7 +213,8 @@ class Server(object):
             application_instance = details.get("application_instance", None)
             # First, see if the protocol disconnected and the app has taken
             # too long to close up
-            if disconnected and time.time() - disconnected > self.application_close_timeout:
+            expired = time.time() - disconnected > self.application_close_timeout
+            if disconnected and expired:
                 if not application_instance.done():
                     logger.warning(
                         "Application instance %r for connection %s took too long to shut down and was killed.",
@@ -252,6 +253,14 @@ class Server(object):
             # Check to see if protocol is closed and app is closed so we can remove it
             if not application_instance and disconnected:
                 del self.connections[protocol]
+            else:
+                if disconnected:
+                    print(f'Expired {expired}')
+                    if application_instance:
+                        print(f'Application {application_instance.done()}')
+                    else:
+                        print(f'Application is none. Impossible')
+        print('Application checker has been called')
         reactor.callLater(1, self.application_checker)
 
     def kill_all_applications(self):
@@ -289,13 +298,6 @@ class Server(object):
 
     def monitoring(self):
 
-        from pympler import muppy
-        from pympler import summary
-        all_objects = muppy.get_objects()
-        sum1 = summary.summarize(all_objects)
-        summary.print_(sum1)
-        self.tr.print_diff()
-        print("============================")
         print(f'Common count {len(self.connections)}')
         disconnected_cnt = 0
         for conn in self.connections:
