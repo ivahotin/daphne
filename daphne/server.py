@@ -263,7 +263,6 @@ class Server(object):
                         print(f'Application {application_instance.done()}')
                     else:
                         print(f'Application is none. Impossible')
-        print('Application checker has been called')
         reactor.callLater(1, self.application_checker)
 
     def kill_all_applications(self):
@@ -301,6 +300,9 @@ class Server(object):
 
     def monitoring(self):
 
+        from pympler import muppy
+        muppy.print_summary()
+        self.tr.print_diff()
         print(f'Common count {len(self.connections)}')
         disconnected_cnt = 0
         for conn in self.connections:
@@ -308,4 +310,4 @@ class Server(object):
                 disconnected_cnt += 1
         print(f'Disconnected {disconnected_cnt}')
 
-        reactor.callLater(100, self.monitoring)
+        reactor.callLater(60, self.monitoring)
