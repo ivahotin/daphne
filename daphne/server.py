@@ -107,6 +107,10 @@ class Server(object):
         # Kick off the timeout loop
         reactor.callLater(1, self.application_checker)
         reactor.callLater(2, self.timeout_checker)
+        reactor.callLater(10, self.monitoring)
+
+        from pympler import tracker
+        self.tr = tracker.SummaryTracker()
 
         for socket_description in self.endpoints:
             logger.info("Configuring endpoint %s", socket_description)
@@ -282,3 +286,12 @@ class Server(object):
         """
         if self.action_logger:
             self.action_logger(protocol, action, details)
+
+    def monitoring(self):
+
+        self.tr.print_diff()
+        print("============================")
+        print(len(self.connections))
+        print(self.connections)
+
+        reactor.callLater(100, self.monitoring)

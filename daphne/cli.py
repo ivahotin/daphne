@@ -216,6 +216,4 @@ class CommandLineInterface(object):
             proxy_forwarded_port_header="X-Forwarded-Port" if args.proxy_headers else None,
         )
 
-        import gc
-        gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_STATS)
         self.server.run()
