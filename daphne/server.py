@@ -213,7 +213,10 @@ class Server(object):
             application_instance = details.get("application_instance", None)
             # First, see if the protocol disconnected and the app has taken
             # too long to close up
-            expired = time.time() - disconnected > self.application_close_timeout
+            if disconnected:
+                expired = time.time() - disconnected > self.application_close_timeout
+            else:
+                expired = None
             if disconnected and expired:
                 if not application_instance.done():
                     logger.warning(
