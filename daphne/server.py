@@ -296,7 +296,11 @@ class Server(object):
         summary.print_(sum1)
         self.tr.print_diff()
         print("============================")
-        print(len(self.connections))
-        print(self.connections)
+        print(f'Common count {len(self.connections)}')
+        disconnected_cnt = 0
+        for conn in self.connections:
+            if 'disconnected' in self.connections[conn]:
+                disconnected_cnt += 1
+        print(f'Disconnected {disconnected_cnt}')
 
         reactor.callLater(100, self.monitoring)
