@@ -289,6 +289,11 @@ class Server(object):
 
     def monitoring(self):
 
+        from pympler import muppy
+        from pympler import summary
+        all_objects = muppy.get_objects()
+        sum1 = summary.summarize(all_objects)
+        summary.print_(sum1)
         self.tr.print_diff()
         print("============================")
         print(len(self.connections))
